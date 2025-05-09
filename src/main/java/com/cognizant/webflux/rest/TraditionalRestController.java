@@ -1,6 +1,6 @@
 package com.cognizant.webflux.rest;
 
-import com.cognizant.webflux.model.Product;
+import com.cognizant.webflux.dto.ProductDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -25,11 +25,11 @@ public class TraditionalRestController {
             .build();
 
     @GetMapping("products")
-    public List<Product> getProducts() {
+    public List<ProductDTO> getProducts() {
         var list = this.restClient.get()
                 .uri("/demo01/products")
                 .retrieve()
-                .body(new ParameterizedTypeReference<List<Product>>() {
+                .body(new ParameterizedTypeReference<List<ProductDTO>>() {
 
                 });
 

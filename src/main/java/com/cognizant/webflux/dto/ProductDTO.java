@@ -1,6 +1,6 @@
-package com.cognizant.webflux.model;
+package com.cognizant.webflux.dto;
 
-public record Product(
+public record ProductDTO(
         Integer id,
         String description,
         Integer price

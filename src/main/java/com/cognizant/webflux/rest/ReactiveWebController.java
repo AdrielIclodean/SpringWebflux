@@ -1,7 +1,7 @@
 package com.cognizant.webflux.rest;
 
 
-import com.cognizant.webflux.model.Product;
+import com.cognizant.webflux.dto.ProductDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -22,13 +22,13 @@ public class ReactiveWebController {
 
     //This mapping will not be understood by the browser, so the browser will still wait for the entire response
     @GetMapping("products")
-    public Flux<Product> getProducts() {
+    public Flux<ProductDTO> getProducts() {
         var list = this.webClient.get()
                 .uri("/demo01/products")
                 .retrieve()
-                .bodyToFlux(Product.class)
+                .bodyToFlux(ProductDTO.class)
                 //when an item arrives
-                .doOnNext(product -> logger.info("Received product " + product));
+                .doOnNext(productDTO -> logger.info("Received product " + productDTO));
 
         logger.info("Received response " + list);
 
@@ -37,13 +37,13 @@ public class ReactiveWebController {
 
         //This mapping will be understood by the browser, so the browser will not wait for the entire response
         @GetMapping(value = "products/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-        public Flux<Product> getProductsStream() {
+        public Flux<ProductDTO> getProductsStream() {
         var list = this.webClient.get()
                 .uri("/demo01/products")
                 .retrieve()
-                .bodyToFlux(Product.class)
+                .bodyToFlux(ProductDTO.class)
                 //when an item arrives
-                .doOnNext(product -> logger.info("Received product " + product));
+                .doOnNext(productDTO -> logger.info("Received product " + productDTO));
 
         logger.info("Received response " + list);
 
