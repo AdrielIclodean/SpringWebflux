@@ -3,6 +3,7 @@ package com.cognizant.webflux.rest;
 import com.cognizant.webflux.dto.CustomerDTO;
 import com.cognizant.webflux.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -27,6 +28,12 @@ public class CustomerRestController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/page")
+    public Flux<CustomerDTO> getAllCustomersPageable(@RequestParam(defaultValue = "1") int page,
+                                                     @RequestParam(defaultValue = "10") int size) {
+        return customerService.getCustomersByPage(Pageable.ofSize(size).withPage(page - 1));
+    }
+
     @PostMapping
     public Mono<CustomerDTO> saveCustomer(@RequestBody Mono<CustomerDTO> customerDTO) {
         return customerService.saveCustomer(customerDTO);
@@ -40,7 +47,11 @@ public class CustomerRestController {
     }
 
     @DeleteMapping("/{id}")
-    public Mono<Void> deleteCustomer(@PathVariable Long id) {
-        return customerService.deleteCustomer(id);
+    public Mono<ResponseEntity<Void>> deleteCustomer(@PathVariable Long id) {
+        return customerService.deleteCustomer(id)
+                .filter(deleted -> deleted)
+                .map(deleted -> ResponseEntity.ok().<Void>build())
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
+
 }

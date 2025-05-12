@@ -4,6 +4,7 @@ import com.cognizant.webflux.dto.CustomerDTO;
 import com.cognizant.webflux.mapper.CustomerMapper;
 import com.cognizant.webflux.repository.reactive.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -40,7 +41,12 @@ public class CustomerService {
                 .map(CustomerMapper::toDTO); // convert to DTO
     }
 
-    public Mono<Void> deleteCustomer(Long id) {
-        return customerRepository.deleteById(id);
+    public Mono<Boolean> deleteCustomer(Long id) {
+        return customerRepository.deleteCustomerById(id);
+    }
+
+    public Flux<CustomerDTO> getCustomersByPage(Pageable pageable){
+        return customerRepository.findBy(pageable)
+                .map(CustomerMapper::toDTO);
     }
 }
