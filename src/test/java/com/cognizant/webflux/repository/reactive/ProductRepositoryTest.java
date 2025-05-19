@@ -3,6 +3,7 @@ package com.cognizant.webflux.repository.reactive;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import reactor.test.StepVerifier;
@@ -11,6 +12,7 @@ import reactor.test.StepVerifier;
 public class ProductRepositoryTest extends AbstractTest {
 
     @Autowired
+    @Qualifier("value = productRepositoryMain")
     private ProductRepository productRepository;
 
     @Test

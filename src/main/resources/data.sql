@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS customer_order;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS productMillions;
 
 CREATE TABLE customer (
   id int AUTO_INCREMENT primary key,
@@ -9,6 +10,12 @@ CREATE TABLE customer (
 );
 
 CREATE TABLE product (
+  id int AUTO_INCREMENT primary key,
+  description VARCHAR(100),
+  price int
+);
+
+CREATE TABLE productMillions (
   id int AUTO_INCREMENT primary key,
   description VARCHAR(100),
   price int
