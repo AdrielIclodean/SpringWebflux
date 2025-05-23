@@ -1,14 +1,29 @@
 package com.cognizant.webflux.webclient;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
+import reactor.netty.resources.ConnectionProvider;
 
 import java.time.Duration;
-import java.util.HashMap;
 
 public class WebclientTest extends AbstractWebClient {
 
-    private final WebClient webClient = createWebClient();
+    private final WebClient webClient = createWebClient(b -> {
+        var defaultConnectionsPoolSize = 500;
+        ConnectionProvider myConnectionProvider = ConnectionProvider.builder("myConnectionProvider")
+                .lifo()
+                .maxConnections(defaultConnectionsPoolSize)
+                .pendingAcquireMaxCount(defaultConnectionsPoolSize * 5)
+                .build();
+
+        var httpClient = HttpClient.create(myConnectionProvider)
+                .compress(true)
+                .keepAlive(true);
+
+        b.clientConnector(new ReactorClientHttpConnector(httpClient));
+    });
 
     @Test
     public void testGetProductById() throws InterruptedException {
